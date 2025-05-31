@@ -1,4 +1,4 @@
-package br.com.gabriellysemijoias.gestao_vagas.company.dto;
+package br.com.gabriellysemijoias.gestao_vagas.modules.company.dto;
 
 public class AuthCompanyDTO {
     private String username;
