@@ -1,12 +1,10 @@
-package br.com.gabriellysemijoias.gestao_vagas.modules.company.dto;
+package br.com.gabriellysemijoias.gestao_vagas.company.dto;
 
 public class AuthCompanyDTO {
     private String username;
     private String email;
     private String name;
     private String password;
-
-    // Getters e Setters
 
     public String getUsername() {
         return username;

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/company")
 public class CompanyController {
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<String> createCompany(@RequestBody AuthCompanyDTO dto) {
         System.out.println("Criando empresa: " + dto.getUsername());
         return ResponseEntity.ok("Empresa criada com sucesso!");
