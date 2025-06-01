@@ -1,4 +1,4 @@
-package br.com.gabriellysemijoias.gestao_vagas.modules.company.dto;
+package br.com.gabriellysemijoias.gestao_vagas.modules.candidate.dto;
 
 import java.util.List;
 
@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthCompanyResponseDTO {
+public class AuthCandidateResponseDTO {
+
   private String access_token;
   private Long expires_in;
   private List<String> roles;

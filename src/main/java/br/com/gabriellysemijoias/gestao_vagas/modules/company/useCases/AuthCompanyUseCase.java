@@ -32,8 +32,9 @@ public class AuthCompanyUseCase {
   private PasswordEncoder passwordEncoder;
 
   public AuthCompanyResponseDTO execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
-    var company = this.companyRepository.findByUsername(authCompanyDTO.getUsername())
-        .orElseThrow(() -> new UsernameNotFoundException("Username/password incorrect"));
+    var company = this.companyRepository.findByUsername(authCompanyDTO.getUsername()).orElseThrow(() -> {
+      throw new UsernameNotFoundException("Username/password incorrect");
+    });
 
     var passwordMatches = this.passwordEncoder.matches(authCompanyDTO.getPassword(), company.getPassword());
 
@@ -42,18 +43,23 @@ public class AuthCompanyUseCase {
     }
 
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
-    var expiresIn = Instant.now().plus(Duration.ofHours(2));
 
-    String token = JWT.create()
-        .withIssuer("javagas")
-        .withSubject(company.getId().toString())
+    var expiresIn = Instant.now().plus(Duration.ofMinutes(10));
+
+    var token = JWT.create().withIssuer("javagas")
         .withExpiresAt(expiresIn)
+        .withSubject(company.getId().toString())
         .withClaim("roles", Arrays.asList("COMPANY"))
         .sign(algorithm);
 
-    return AuthCompanyResponseDTO.builder()
+        var roles = Arrays.asList("COMPANY");
+
+    var authCompanyResponseDTO = AuthCompanyResponseDTO.builder()
         .access_token(token)
         .expires_in(expiresIn.toEpochMilli())
+        .roles(roles)
         .build();
+
+    return authCompanyResponseDTO;
   }
 }

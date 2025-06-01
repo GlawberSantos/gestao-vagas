@@ -3,18 +3,24 @@ package br.com.gabriellysemijoias.gestao_vagas.modules.company.useCases;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.gabriellysemijoias.gestao_vagas.exceptions.CompanyNotFoundException;
 import br.com.gabriellysemijoias.gestao_vagas.modules.company.entities.JobEntity;
-import br.com.gabriellysemijoias.gestao_vagas.modules.company.entities.JobRepository;
+import br.com.gabriellysemijoias.gestao_vagas.modules.company.repositories.CompanyRepository;
+import br.com.gabriellysemijoias.gestao_vagas.modules.company.repositories.JobRepository;
 
 @Service
 public class CreateJobUseCase {
 
-  @Autowired
-  private JobRepository jobRepository;
+    @Autowired
+    private JobRepository jobRepository;
 
-  public JobEntity execute(JobEntity jobEntity) {
-    // Aqui você pode colocar regras de negócio antes de salvar, se necessário
+    @Autowired
+    private CompanyRepository companyRepository;
 
-    return jobRepository.save(jobEntity); // Salva no banco de dados
-  }
+    public JobEntity execute(JobEntity jobEntity) {
+        companyRepository.findById(jobEntity.getCompanyId()).orElseThrow(() -> {
+            throw new CompanyNotFoundException();
+        });
+        return this.jobRepository.save(jobEntity);
+    }
 }
