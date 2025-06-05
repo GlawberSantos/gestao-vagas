@@ -15,16 +15,15 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfig {
 
   @Autowired
-  private SecurityCompanyFilter securityCompanyFilter;
+  private SecurityFilter securityFilter;
 
   @Autowired
   private SecurityCandidateFilter securityCandidateFilter;
 
-  private static final String[] PERMIT_ALL_LIST = {
+  private static final String[] SWAGGER_LIST = {
       "/swagger-ui/**",
       "/v3/api-docs/**",
       "/swagger-resource/**",
-      "/actuator/**"
   };
 
   @Bean
@@ -35,16 +34,16 @@ public class SecurityConfig {
               .requestMatchers("/company/").permitAll()
               .requestMatchers("/company/auth").permitAll()
               .requestMatchers("/candidate/auth").permitAll()
-              .requestMatchers(PERMIT_ALL_LIST).permitAll();
+              .requestMatchers(SWAGGER_LIST).permitAll();
           auth.anyRequest().authenticated();
         })
         .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
-        .addFilterBefore(securityCompanyFilter, BasicAuthenticationFilter.class);
+        .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
     return http.build();
   }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
+    @Bean
+    PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 }

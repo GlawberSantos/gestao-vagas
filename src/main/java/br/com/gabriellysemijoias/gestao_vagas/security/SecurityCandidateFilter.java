@@ -23,10 +23,10 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
   private JWTCandidateProvider jwtProvider;
 
 @Override
-protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                @NonNull HttpServletResponse response,
-                                @NonNull FilterChain filterChain)
-                                throws ServletException, IOException {
+protected void doFilterInternal(
+    @NonNull HttpServletRequest request,
+    @NonNull HttpServletResponse response,
+    @NonNull FilterChain filterChain) throws ServletException, IOException {
     // SecurityContextHolder.getContext().setAuthentication(null);
     String header = request.getHeader("Authorization");
 
