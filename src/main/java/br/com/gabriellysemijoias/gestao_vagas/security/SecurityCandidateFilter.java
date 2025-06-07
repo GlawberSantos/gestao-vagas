@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import br.com.gabriellysemijoias.gestao_vagas.providers.JWTCandidateProvider;
-import org.springframework.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,11 +21,9 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
   @Autowired
   private JWTCandidateProvider jwtProvider;
 
-@Override
-protected void doFilterInternal(
-    @NonNull HttpServletRequest request,
-    @NonNull HttpServletResponse response,
-    @NonNull FilterChain filterChain) throws ServletException, IOException {
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
     // SecurityContextHolder.getContext().setAuthentication(null);
     String header = request.getHeader("Authorization");
 
