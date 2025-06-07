@@ -53,9 +53,10 @@ services:
     ports:
       - 8080:8080
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/gestao_vagas
-      - SPRING_DATASOURCE_USERNAME=admin
-      - SPRING_DATASOURCE_PASSWORD=admin
+      - DATABASE_URL=jdbc:postgresql://postgres:5432/gestao_vagas
+      - DATABASE_USERNAME=admin
+      - DATABASE_PASSWORD=admin
+
     depends_on:
       - postgres
     networks:
