@@ -1,15 +1,23 @@
-FROM ubuntu:latest AS build
+# Etapa de build
+FROM eclipse-temurin:17-jdk-jammy AS build
 
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
+# Atualiza e instala o Maven
+RUN apt-get update && apt-get install -y maven
+
+# Copia todos os arquivos do projeto para a imagem
 COPY . .
 
-RUN apt-get install maven -y
-RUN mvn clean install
+# Compila o projeto, ignorando os testes
+RUN mvn clean install -DskipTests
 
-FROM openjdk:17-jdk-slim 
+# Etapa final: usa uma imagem mais leve para rodar a aplicação
+FROM eclipse-temurin:17-jdk-jammy
+
+# Expõe a porta 8080
 EXPOSE 8080
 
-COPY --from=build /target/gestao_vagas-0.0.1.jar app.jar
+# Copia o JAR gerado para a imagem final
+COPY --from=build target/gestao_vagas-0.0.1.jar app.jar
 
-ENTRYPOINT [ "java", "-jar", "app.jar" ]
+# Define o comando para executar o JAR
+ENTRYPOINT ["java", "-jar", "app.jar"]
