@@ -5,7 +5,7 @@ networks:
     driver: bridge
 
 volumes:
-  prometheus_data: 
+  prometheus_data:
   grafana_data:
   postgres_data:
 
@@ -56,7 +56,12 @@ services:
       - DATABASE_URL=jdbc:postgresql://postgres:5432/gestao_vagas
       - DATABASE_USERNAME=admin
       - DATABASE_PASSWORD=admin
-
+      # Valores abaixo servem só para rodar local/demo — nunca use estes
+      # valores literais em produção. Em produção, troque por segredos
+      # reais gerenciados fora do repositório (variáveis de ambiente do
+      # servidor, secrets manager, etc.).
+      - JWT_SECRET_COMPANY=${JWT_SECRET_COMPANY:-local-dev-secret-company-troque-isto}
+      - JWT_SECRET_CANDIDATE=${JWT_SECRET_CANDIDATE:-local-dev-secret-candidate-troque-isto}
     depends_on:
       - postgres
     networks:
