@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestão de Vagas — Documentação da API</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12172B;
+    --ink-2:#1B2140;
+    --paper:#E7E9F0;
+    --paper-dim:#9098B0;
+    --stamp-company:#E8A33D;
+    --stamp-candidate:#6FA089;
+    --line: rgba(231,233,240,0.14);
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- Hero ---------- */
+  header.hero{
+    padding:88px 0 64px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--paper-dim);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:28px;
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--stamp-company);box-shadow:0 0 0 3px rgba(232,163,61,0.18);}
+  h1{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:clamp(34px,5vw,54px);
+    line-height:1.08;
+    margin:0 0 22px;
+    max-width:760px;
+    letter-spacing:-0.01em;
+  }
+  .hero p.lede{
+    font-size:18px;
+    color:var(--paper-dim);
+    max-width:560px;
+    margin:0 0 36px;
+  }
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+  .btn{
+    font-family:var(--mono);
+    font-size:14px;
+    font-weight:500;
+    padding:12px 20px;
+    border-radius:6px;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--paper);color:var(--ink);}
+  .btn-primary:hover{background:#fff;}
+  .btn-ghost{border:1px solid var(--line);color:var(--paper);}
+  .btn-ghost:hover{border-color:var(--paper-dim);}
+  .api-only-note{
+    margin-top:28px;
+    font-size:13px;
+    color:var(--paper-dim);
+    border-left:2px solid var(--stamp-company);
+    padding-left:14px;
+    max-width:520px;
+  }
+
+  /* ---------- Stack strip ---------- */
+  .stack-strip{
+    border-bottom:1px solid var(--line);
+    padding:20px 0;
+  }
+  .stack-strip .wrap{display:flex;flex-wrap:wrap;gap:10px 28px;font-family:var(--mono);font-size:13px;color:var(--paper-dim);}
+  .stack-strip strong{color:var(--paper);font-weight:500;}
+
+  /* ---------- Section shell ---------- */
+  section{padding:72px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .section-head{max-width:600px;margin-bottom:44px;}
+  .section-head .eyebrow{margin-bottom:14px;}
+  .section-head h2{
+    font-family:var(--mono);
+    font-size:28px;
+    font-weight:600;
+    margin:0 0 12px;
+  }
+  .section-head p{color:var(--paper-dim);margin:0;font-size:15px;}
+
+  /* ---------- Signature: two lanes ---------- */
+  .lanes{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .lane{padding:28px;}
+  .lane + .lane{border-left:1px solid var(--line);}
+  .lane-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .stamp{
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:5px 10px;
+    border-radius:4px;
+    border:1px solid currentColor;
+  }
+  .lane.company .stamp{color:var(--stamp-company);}
+  .lane.candidate .stamp{color:var(--stamp-candidate);}
+  .lane h3{font-family:var(--mono);font-size:16px;margin:0;font-weight:500;}
+  .route{
+    display:flex;
+    gap:12px;
+    align-items:baseline;
+    padding:12px 0;
+    border-top:1px solid var(--line);
+    font-size:14px;
+  }
+  .route:first-of-type{border-top:none;}
+  .method{
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:700;
+    padding:2px 7px;
+    border-radius:4px;
+    min-width:44px;
+    text-align:center;
+    flex-shrink:0;
+  }
+  .method.get{background:rgba(111,160,137,0.16);color:var(--stamp-candidate);}
+  .method.post{background:rgba(232,163,61,0.16);color:var(--stamp-company);}
+  .path{font-family:var(--mono);font-size:13px;flex-shrink:0;}
+  .desc{color:var(--paper-dim);font-size:13px;}
+  .lock{margin-left:auto;flex-shrink:0;color:var(--paper-dim);font-size:12px;font-family:var(--mono);opacity:.7;}
+
+  /* ---------- Run locally ---------- */
+  .steps{list-style:none;margin:0;padding:0;counter-reset:step;}
+  .steps li{
+    counter-increment:step;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    padding:20px 0;
+    border-top:1px solid var(--line);
+  }
+  .steps li:first-child{border-top:none;}
+  .steps li::before{
+    content:counter(step);
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--paper-dim);
+    border:1px solid var(--line);
+    border-radius:50%;
+    width:28px;height:28px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .steps code, .lede code{
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:2px 7px;
+    font-family:var(--mono);
+    font-size:13px;
+  }
+  .steps pre{
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:14px 16px;
+    overflow-x:auto;
+    margin:10px 0 0;
+    font-family:var(--mono);
+    font-size:13px;
+  }
+  .steps p{margin:2px 0 0;color:var(--paper-dim);font-size:14px;}
+  .steps strong{color:var(--paper);font-weight:500;}
+
+  /* ---------- Footer ---------- */
+  footer{padding:40px 0 64px;}
+  footer .wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--paper-dim);
+  }
+  footer a{text-decoration:underline;text-underline-offset:3px;}
+  footer a:hover{color:var(--paper);}
+
+  @media (max-width:720px){
+    .lanes{grid-template-columns:1fr;}
+    .lane + .lane{border-left:none;border-top:1px solid var(--line);}
+    header.hero{padding:56px 0 44px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .btn{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> API · Sem interface — documentação abaixo</div>
+    <h1>Duas portas de entrada.<br>Uma vaga no meio.</h1>
+    <p class="lede">API REST para gestão de vagas: empresas publicam, candidatos se inscrevem — cada lado com seu próprio login e seu próprio token JWT.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://github.com/GlawberSantos/gestao-vagas" target="_blank" rel="noopener">Ver repositório →</a>
+      <a class="btn btn-ghost" href="#rotas">Ver rotas da API</a>
+    </div>
+    <p class="api-only-note">Este projeto é um backend puro (Java/Spring Boot) — não existe tela para navegar aqui. Esta página documenta a API; para testar de verdade, rode o projeto localmente com Docker (passo a passo abaixo) e abra o Swagger.</p>
+  </div>
+</header>
+
+<div class="stack-strip">
+  <div class="wrap">
+    <span><strong>Java 17</strong></span>
+    <span><strong>Spring Boot 3.5</strong></span>
+    <span><strong>PostgreSQL</strong></span>
+    <span><strong>Spring Security · JWT</strong></span>
+    <span><strong>Docker Compose</strong></span>
+    <span><strong>Prometheus + Grafana</strong></span>
+  </div>
+</div>
+
+<section id="rotas">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="dot" style="background:var(--stamp-candidate);box-shadow:0 0 0 3px rgba(111,160,137,0.18);"></span> Arquitetura</div>
+      <h2>Dois módulos, dois segredos de token</h2>
+      <p>Um token de candidato não abre rota de empresa, e vice-versa — cada perfil tem seu próprio filtro de segurança e sua própria chave JWT.</p>
+    </div>
+
+    <div class="lanes">
+      <div class="lane company">
+        <div class="lane-head">
+          <span class="stamp">Empresa</span>
+          <h3>/company</h3>
+        </div>
+        <div class="route">
+          <span class="method post">POST</span>
+          <span class="path">/company/</span>
+          <span class="desc">Cadastra uma empresa</span>
+        </div>
+        <div class="route">
+          <span class="method post">POST</span>
+          <span class="path">/company/auth</span>
+          <span class="desc">Login da empresa</span>
+        </div>
+        <div class="route">
+          <span class="method post">POST</span>
+          <span class="path">/company/job/</span>
+          <span class="desc">Publica uma vaga</span>
+          <span class="lock">🔒 auth</span>
+        </div>
+      </div>
+
+      <div class="lane candidate">
+        <div class="lane-head">
+          <span class="stamp">Candidato</span>
+          <h3>/candidate</h3>
+        </div>
+        <div class="route">
+          <span class="method post">POST</span>
+          <span class="path">/candidate/</span>
+          <span class="desc">Cadastra um candidato</span>
+        </div>
+        <div class="route">
+          <span class="method post">POST</span>
+          <span class="path">/candidate/auth</span>
+          <span class="desc">Login do candidato</span>
+        </div>
+        <div class="route">
+          <span class="method get">GET</span>
+          <span class="path">/candidate/</span>
+          <span class="desc">Perfil do candidato</span>
+          <span class="lock">🔒 auth</span>
+        </div>
+        <div class="route">
+          <span class="method get">GET</span>
+          <span class="path">/candidate/job</span>
+          <span class="desc">Lista vagas (com filtro)</span>
+          <span class="lock">🔒 auth</span>
+        </div>
+        <div class="route">
+          <span class="method post">POST</span>
+          <span class="path">/candidate/job/apply</span>
+          <span class="desc">Candidata-se a uma vaga</span>
+          <span class="lock">🔒 auth</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="dot"></span> Rodando local</div>
+      <h2>Do clone ao primeiro token</h2>
+      <p>Precisa de Docker e Docker Compose instalados.</p>
+    </div>
+    <ol class="steps">
+      <li>
+        <div>
+          <strong>Clone e entre na pasta</strong>
+          <pre>git clone https://github.com/GlawberSantos/gestao-vagas.git
+cd gestao-vagas</pre>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Crie o arquivo <code>.env</code></strong>
+          <p>Com <code>DATABASE_URL</code>, <code>DATABASE_USERNAME</code>, <code>DATABASE_PASSWORD</code>, <code>JWT_SECRET_COMPANY</code> e <code>JWT_SECRET_CANDIDATE</code> — gere os dois segredos com <code>openssl rand -base64 32</code>.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Suba os containers</strong>
+          <pre>docker-compose up -d</pre>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Abra o Swagger</strong>
+          <p>Com a API no ar em <code>localhost:8080</code>, a documentação interativa fica em <code>/swagger-ui/index.html</code>.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Gestão de Vagas — Glauber Santos</span>
+    <span><a href="https://github.com/GlawberSantos/gestao-vagas" target="_blank" rel="noopener">Código-fonte no GitHub</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
